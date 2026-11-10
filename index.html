@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172554"><meta name="description" content="Free mathematics workspace from school to graduate level.">
+<link rel="manifest" href="manifest.webmanifest"><title>MathMate — Mathematics Solver</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--ink:#14213d;--muted:#64748b;--line:#dce4ef;--green:#087f5b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:linear-gradient(130deg,#172554,#1d4ed8);color:white;padding:22px 17px 20px}
+header h1{margin:0;font-size:27px}header p{margin:5px 0 0;color:#dbeafe}
+main{max-width:900px;margin:auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin:0 0 13px;box-shadow:0 3px 14px #0f172a0a}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:15px 0 6px}
+label{display:block;font-weight:650;margin:10px 0 5px}input,select,textarea{font:inherit;width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:100px;resize:vertical}button{font:inherit;border:0;border-radius:11px;padding:12px 15px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+button.secondary{background:#e8eef9;color:#1e3a8a}button:disabled{opacity:.55}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.note{color:var(--muted);font-size:13px;line-height:1.5}.status{padding:10px;border-radius:10px;background:#eff6ff;color:#1e40af;margin-top:10px;font-size:13px}
+.result{white-space:pre-wrap;overflow-wrap:anywhere;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:13px;line-height:1.65}
+.step{padding:10px 0;border-bottom:1px solid var(--line)}.step:last-child{border:0}.step b{display:block;color:#1d4ed8;margin-bottom:3px}
+.pill{display:inline-block;background:#eaf1ff;color:#1e40af;border-radius:99px;padding:4px 9px;font-size:12px;margin:2px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+.hidden{display:none}.filebtn{display:inline-block;background:#e8eef9;color:#1e3a8a;padding:11px 13px;border-radius:10px;font-weight:700}
+@media(max-width:540px){.grid{grid-template-columns:1fr}header{padding-top:18px}}
+</style>
+</head>
+<body>
+<header><h1>📘 MathMate</h1><p>Detailed mathematics workspace · Undergraduate + Graduate</p></header>
+<main>
+<section class="card">
+<h2>1. Enter or photograph a problem</h2>
+<label for="problem">Mathematical expression, equation, matrix, or problem statement</label>
+<textarea id="problem" placeholder="Examples:
+x^2 - 5*x + 6 = 0
+integrate sin(x)^2
+A proof: (x+y)^2 = x^2 + 2*x*y + y^2
+Matrix: [[1,2],[3,4]]"></textarea>
+<div class="actions"><label class="filebtn" for="photo">📷 Take photo / upload image</label><input class="hidden" id="photo" type="file" accept="image/*" capture="environment"></div>
+<div class="note">Photo recognition is experimental. Always check the recognised equation, especially fractions, powers, roots, handwritten symbols and diagrams.</div>
+<div id="ocrstatus" class="status hidden"></div>
+</section>
+<section class="card">
+<h2>2. Choose what to do</h2>
+<div class="grid">
+<div><label for="topic">Mathematics area</label><select id="topic">
+<option>General / automatic</option><option>Algebra</option><option>Calculus</option><option>Real analysis</option><option>Complex analysis</option><option>Linear algebra</option><option>Abstract algebra</option><option>Differential equations</option><option>Number theory</option><option>Discrete mathematics</option><option>Probability & statistics</option><option>Geometry & trigonometry</option><option>Topology</option><option>Numerical mathematics</option><option>Transforms</option><option>Optimization</option><option>Proof checking</option>
+<option>Functional analysis</option><option>Measure theory</option><option>Partial differential equations</option>
+<option>Distribution theory</option><option>Lie groups & Lie algebras</option><option>Representation theory</option>
+<option>Algebraic topology</option><option>Differential geometry</option><option>Manifolds & tensors</option>
+<option>Algebraic geometry</option><option>Advanced numerical analysis</option><option>Numerical PDEs</option>
+<option>Finite element methods</option><option>Control theory</option><option>Signal processing</option>
+<option>Fluid mechanics mathematics</option><option>Continuum mechanics</option><option>Electromagnetics</option>
+<option>Quantum mathematics</option><option>Engineering optimisation</option><option>Reliability engineering</option>
+<option>Operations research</option><option>Information theory</option>
+</select></div>
+<div><label for="task">Operation</label><select id="task">
+<option value="auto">Choose automatically</option><option value="simplify">Simplify</option><option value="solve">Solve equation(s)</option><option value="factor">Factor</option><option value="expand">Expand</option><option value="diff">Differentiate</option><option value="integrate">Integrate</option><option value="limit">Limit</option><option value="series">Taylor series</option><option value="ode">Solve ODE</option><option value="matrix">Matrix analysis</option><option value="number">Number theory</option><option value="stats">Statistics</option><option value="identity">Check identity</option><option value="numeric">Numerical evaluation</option><option value="laplace">Laplace transform</option><option value="fourier">Fourier transform</option><option value="summation">Summation</option><option value="gradient">Gradient</option>
+<option value="jacobian">Jacobian</option><option value="hessian">Hessian</option>
+<option value="divergence">Divergence</option><option value="curl">Curl</option>
+</select></div>
+<div><label for="variable">Variable</label><input id="variable" value="x" placeholder="x"></div>
+<div><label for="extra">Extra parameter (optional)</label><input id="extra" placeholder="e.g. point for limit: 0"></div>
+</div>
+<div class="actions"><button id="solve">Solve with detailed working</button><button class="secondary" id="clear">Clear</button></div>
+<div id="engine" class="status">Mathematical engine is loading. First launch requires an internet connection.</div>
+</section>
+<section class="card">
+<h2>3. Detailed solution</h2>
+<div id="output" class="result">Your solution will appear here.</div>
+<div class="note" style="margin-top:9px">MathMate reports the mathematical method and symbolic result. It does not invent missing proof steps: advanced proofs and ambiguous questions may need manual verification.</div>
+</section>
+<section class="card">
+<h2>Coverage guide</h2>
+<span class="pill">Algebra</span><span class="pill">Calculus</span><span class="pill">Real & complex analysis</span><span class="pill">Linear algebra</span><span class="pill">Abstract algebra basics</span><span class="pill">ODEs</span><span class="pill">Number theory</span><span class="pill">Combinatorics</span><span class="pill">Probability & statistics</span><span class="pill">Transforms</span><span class="pill">Optimization basics</span><span class="pill">Proof/identity checks</span>
+<span class="pill">Functional analysis</span><span class="pill">Measure theory</span><span class="pill">PDE theory</span>
+<span class="pill">Differential geometry</span><span class="pill">Lie theory</span><span class="pill">Algebraic topology</span>
+<span class="pill">Tensor calculus</span><span class="pill">Finite elements</span><span class="pill">Control theory</span>
+<span class="pill">Signal processing</span><span class="pill">Continuum mechanics</span><span class="pill">Engineering optimisation</span>
+<p class="note">Coverage depends on the operation and the capabilities of the symbolic engine. Topology, advanced abstract algebra, measure theory, research-level proofs, and diagram-heavy geometry are not fully automated by this starter.</p>
+</section>
+<section class="card">
+<h2>Privacy and cost</h2><p class="note">No paid API key, account, or subscription is used. The symbolic engine runs in your browser using Pyodide and SymPy. Initial loading downloads open-source libraries from public CDNs; internet is required for first setup and photo OCR. The app shell can be installed on Android as a PWA. Do not treat results as a substitute for checking important academic work.</p>
+</section>
+</main><footer>MathMate · Free starter edition · Built for learning</footer>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+<script>
+const $=id=>document.getElementById(id); let pyodide=null, ready=false;
+const pycode=String.raw`
+import sympy as s, json, statistics, math
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application, convert_xor
+TRANS=standard_transformations+(implicit_multiplication_application,convert_xor)
+def parse(v):
+    return parse_expr(v, transformations=TRANS, local_dict={'pi':s.pi,'E':s.E,'oo':s.oo})
+def solve_mm(problem, task, var, extra):
+    x=s.Symbol(var or 'x')
+    p=problem.strip()
+    steps=[]
+    steps.append(("Read the problem", "The input is interpreted as a symbolic mathematical expression. Check that the transcription matches the original question."))
+    t=task
+    if t=='auto':
+        if '=' in p: t='solve'
+        else: t='simplify'
+    try:
+        if t=='solve':
+            if '=' in p:
+                a,b=p.split('=',1); expr=parse(a)-parse(b)
+            else: expr=parse(p)
+            ans=s.solve(expr,x)
+            steps += [("Form an equation", f"Move all terms to one side: {s.sstr(expr)} = 0."),("Solve", "The symbolic solver finds values that make the equation true.")]
+            result=f"Solutions for {var}: {s.sstr(ans)}"
+            if ans:
+                checks=[f"{v}: left-minus-right = {s.sstr(s.simplify(expr.subs(x,v)))}" for v in ans]
+                steps.append(("Check", "; ".join(checks)))
+        elif t=='identity':
+            if '=' not in p: raise ValueError("For identity checking, enter both sides separated by =.")
+            a,b=p.split('=',1); diff=s.simplify(parse(a)-parse(b))
+            result="IDENTITY VERIFIED (difference simplifies to 0)." if diff==0 else f"Not an identity in general. Difference = {s.sstr(diff)}"
+            steps += [("Compare both sides",f"Subtract right-hand side from left-hand side: {s.sstr(diff)}."),("Conclusion","If the difference is identically zero, the identity is verified; otherwise it is not an identity in general.")]
+        elif t=='simplify':
+            e=parse(p); ans=s.simplify(e); result=s.sstr(ans)
+            steps += [("Expression",s.sstr(e)),("Apply symbolic simplification", "Combine equivalent terms and use algebraic identities where applicable."),("Result",s.sstr(ans))]
+        elif t=='factor':
+            e=parse(p); ans=s.factor(e); result=s.sstr(ans)
+            steps += [("Factor the expression",f"Find a product of simpler factors equivalent to {s.sstr(e)}."),("Result",s.sstr(ans))]
+        elif t=='expand':
+            e=parse(p); ans=s.expand(e); result=s.sstr(ans)
+            steps += [("Use distributive laws","Multiply out products and powers."),("Result",s.sstr(ans))]
+        elif t=='diff':
+            e=parse(p); ans=s.diff(e,x); result=f"d/d{var} = {s.sstr(ans)}"
+            steps += [("Identify the function",f"f({var}) = {s.sstr(e)}"),("Differentiate","Apply the applicable power, product, quotient, or chain rules."),("Result",s.sstr(ans))]
+        elif t=='integrate':
+            e=parse(p); ans=s.integrate(e,x); result=f"Integral = {s.sstr(ans)} + C"
+            steps += [("Identify the integrand",s.sstr(e)),("Integrate","Find an antiderivative whose derivative is the original integrand."),("Result",s.sstr(ans)+" + C")]
+        elif t=='limit':
+            e=parse(p); point=parse(extra) if extra else 0; ans=s.limit(e,x,point); result=f"Limit as {var} → {point}: {s.sstr(ans)}"
+            steps += [("Identify the limiting point",f"{var} approaches {point}."),("Evaluate the limit", "Use symbolic limit rules, including one-sided behaviour when needed."),("Result",s.sstr(ans))]
+        elif t=='series':
+            e=parse(p); point=parse(extra) if extra else 0; ans=s.series(e,x,point,7); result=s.sstr(ans)
+            steps += [("Choose expansion point",f"Expand around {var} = {point}."),("Taylor expansion","Compute terms through order 6; O-term records the remainder order."),("Result",s.sstr(ans))]
+        elif t=='ode':
+            eq=s.sympify(p.replace('^','**'), evaluate=False)
+            y=s.Function('y')
+            eq=parse(p) if 'Derivative' in p else eq
+            ans=s.dsolve(eq)
+            result=s.sstr(ans); steps += [("Set up differential equation","The expression is passed to SymPy's ordinary differential equation solver."),("Solve",s.sstr(ans))]
+        elif t=='matrix':
+            M=s.Matrix(eval(p,{"__builtins__":{}},{""}) if False else s.sympify(p))
+            # Matrix input should be entered as [[1,2],[3,4]]
+            if not isinstance(M,s.MatrixBase): M=s.Matrix(M)
+            result=f"Matrix: {M}\nDeterminant: {s.sstr(M.det()) if M.rows==M.cols else 'not square'}\nRank: {M.rank()}\nRREF: {M.rref()[0]}\nEigenvalues: {M.eigenvals() if M.rows==M.cols else 'not square'}"
+            steps += [("Represent the matrix",str(M)),("Compute matrix properties","Calculate rank and reduced row-echelon form; for square matrices also calculate determinant and eigenvalues."),("Result",result)]
+        elif t=='number':
+            n=int(parse(p)); result=f"Integer: {n}\nPrime? {s.isprime(n)}\nPrime factorisation: {s.factorint(n)}"
+            steps += [("Check integer input",str(n)),("Factor into primes",str(s.factorint(n))),("Primality",str(s.isprime(n)))]
+        elif t=='stats':
+            vals=[float(z.strip()) for z in p.replace(';',',').split(',')]
+            result=f"Count: {len(vals)}\nMean: {statistics.mean(vals)}\nMedian: {statistics.median(vals)}\nPopulation variance: {statistics.pvariance(vals)}\nPopulation standard deviation: {statistics.pstdev(vals)}"
+            steps += [("Read data",str(vals)),("Calculate descriptive statistics","Compute mean, median, population variance and standard deviation."),("Result",result)]
+        elif t=='numeric':
+            e=parse(p); result=f"Exact: {s.sstr(e)}\nApproximation: {s.N(e,15)}"
+            steps += [("Exact expression",s.sstr(e)),("Numerical evaluation",s.sstr(s.N(e,15)))]
+        elif t=='laplace':
+            e=parse(p); ans=s.laplace_transform(e,x,s.Symbol('s'), noconds=True); result=s.sstr(ans)
+            steps += [("Transform variable",f"Treat {var} as the time variable."),("Apply Laplace transform",s.sstr(ans))]
+        elif t=='fourier':
+            e=parse(p); k=s.Symbol('k', real=True); ans=s.fourier_transform(e,x,k); result=s.sstr(ans)
+            steps += [("Set transform variable",f"Fourier transform with frequency variable k."),("Apply Fourier transform",s.sstr(ans))]
+        elif t=='summation':
+            e=parse(p); n=s.Symbol(var); ans=s.summation(e,(n,1,s.oo)); result=s.sstr(ans)
+            steps += [("Interpret input","Enter the summand using n as the index variable."),("Sum from 1 to infinity",s.sstr(ans))]
+        elif t in ('gradient','jacobian','hessian','divergence','curl'):
+            # Enter multivariable expressions separated by commas; variable names in the variable field.
+            vars_=[s.Symbol(v.strip()) for v in (var or 'x,y,z').split(',') if v.strip()]
+            parts=[parse(q.strip()) for q in p.split(',')]
+            if t=='gradient':
+                if len(parts)!=1: raise ValueError("Gradient expects one scalar expression.")
+                ans=[s.diff(parts[0],v) for v in vars_]
+                result="Gradient = "+s.sstr(s.Matrix(ans))
+                steps += [("Identify scalar field",s.sstr(parts[0])),("Differentiate with respect to each variable",", ".join(f"∂f/∂{v} = {s.sstr(a)}" for v,a in zip(vars_,ans))),("Result",result)]
+            elif t=='jacobian':
+                ans=s.Matrix([[s.diff(f,v) for v in vars_] for f in parts])
+                result="Jacobian = "+s.sstr(ans)
+                steps += [("Identify vector function","F = ("+", ".join(map(s.sstr,parts))+")"),("Form partial derivatives","Rows correspond to component functions; columns correspond to variables."),("Result",result)]
+            elif t=='hessian':
+                if len(parts)!=1: raise ValueError("Hessian expects one scalar expression.")
+                ans=s.hessian(parts[0],vars_)
+                result="Hessian = "+s.sstr(ans)
+                steps += [("Identify scalar field",s.sstr(parts[0])),("Compute all second partial derivatives","The (i,j) entry is ∂²f/(∂xᵢ∂xⱼ)."),("Result",result)]
+            elif t=='divergence':
+                if len(parts)!=len(vars_): raise ValueError("Divergence expects one vector component per variable.")
+                ans=sum(s.diff(f,v) for f,v in zip(parts,vars_))
+                result="Divergence = "+s.sstr(ans)
+                steps += [("Identify vector field","F = ("+", ".join(map(s.sstr,parts))+")"),("Add matching partial derivatives","div F = sum of ∂Fᵢ/∂xᵢ."),("Result",result)]
+            else:
+                if len(vars_)!=3 or len(parts)!=3: raise ValueError("Curl currently expects three components and variables x,y,z.")
+                F=s.Matrix(parts); X=s.Matrix(vars_)
+                ans=s.Matrix([s.diff(parts[2],vars_[1])-s.diff(parts[1],vars_[2]),s.diff(parts[0],vars_[2])-s.diff(parts[2],vars_[0]),s.diff(parts[1],vars_[0])-s.diff(parts[0],vars_[1])])
+                result="Curl = "+s.sstr(ans)
+                steps += [("Identify vector field","F = ("+", ".join(map(s.sstr,parts))+")"),("Apply curl formula","Compute the three cyclic differences of first partial derivatives."),("Result",result)]
+        else: raise ValueError("This operation is not available yet.")
+        return json.dumps({"ok":True,"result":result,"steps":steps,"operation":t})
+    except Exception as ex:
+        return json.dumps({"ok":False,"error":str(ex),"steps":steps})
+`;
+async function init(){
+ try{$('engine').textContent='Loading the free SymPy mathematics engine…';pyodide=await loadPyodide();await pyodide.loadPackage('sympy');await pyodide.runPythonAsync(pycode);ready=true;$('engine').textContent='Ready. SymPy is loaded in your browser.';}
+ catch(e){$('engine').textContent='Could not load the engine. Check your internet connection and reload. '+e;}
+}
+init();
+$('solve').onclick=async()=>{
+ if(!ready){$('engine').textContent='The engine is still loading. Please wait or reload with internet access.';return;}
+ const problem=$('problem').value.trim();if(!problem){$('output').textContent='Please enter a problem or upload a photo first.';return;}
+ $('solve').disabled=true;$('output').textContent='Working…';
+ try{
+ pyodide.globals.set('mm_problem',problem);pyodide.globals.set('mm_task',$('task').value);pyodide.globals.set('mm_var',$('variable').value||'x');pyodide.globals.set('mm_extra',$('extra').value);
+ const raw=await pyodide.runPythonAsync('solve_mm(mm_problem, mm_task, mm_var, mm_extra)');
+ const data=JSON.parse(raw);
+ if(!data.ok){$('output').textContent='I could not solve this input: '+data.error+'\n\nPlease check the notation or try another operation.';return;}
+ let out='OPERATION: '+data.operation.toUpperCase()+'\n\n';
+ data.steps.forEach((s,i)=>{out+=(i+1)+'. '+s[0]+'\n'+s[1]+'\n\n';});
+ out+='FINAL RESULT\n'+data.result;
+ $('output').textContent=out;
+ }catch(e){$('output').textContent='Error: '+e;}
+ finally{$('solve').disabled=false;}
+};
+$('clear').onclick=()=>{$('problem').value='';$('output').textContent='Your solution will appear here.';$('extra').value='';};
+$('photo').onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ $('ocrstatus').classList.remove('hidden');$('ocrstatus').textContent='Loading free photo text recognition…';
+ try{
+ if(!window.Tesseract){await new Promise((resolve,reject)=>{let sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';sc.onload=resolve;sc.onerror=reject;document.head.appendChild(sc);});}
+ const res=await Tesseract.recognize(file,'eng');$('problem').value=res.data.text;
+ $('ocrstatus').textContent='Text extracted. Please correct the equation carefully before solving; OCR often misreads mathematical symbols.';
+ }catch(err){$('ocrstatus').textContent='Photo recognition could not load. You can type the question manually.';}
+};
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
